@@ -3,6 +3,7 @@ import torch
 import cv2
 import numpy as np
 from torchvision import transforms
+import os
 
 from utils.datasets import letterbox
 from utils.general  import non_max_suppression_kpt
@@ -76,6 +77,8 @@ videos = [
 
 file_name = videos[0] + '.mp4'
 vid_path = '../media/' + file_name
+# Add this after vid_path is defined
+save_name = os.path.splitext(file_name)[0]  # → 'skydiving'
 
 cap = cv2.VideoCapture(vid_path)
 fps = int(cap.get(cv2.CAP_PROP_FPS))
@@ -87,7 +90,9 @@ h, w, _ = frame.shape
 #                       cv2.VideoWriter_fourcc(*'mp4v'), 
 #                       fps, (w, h))
 
-out = cv2.VideoWriter(f"{save_name}_yolo7.avi",cv2.VideoWriter_fourcc('M','J','P','G'), 10, w,h)
+
+out = cv2.VideoWriter(f"{save_name}_yolo7.avi", cv2.VideoWriter_fourcc('M','J','P','G'), 10, (w, h))
+
 
 #-------------------------------------------------------------------------------#
 
@@ -99,14 +104,23 @@ if __name__ == '__main__':
         if not ret:
             print('Unable to read frame. Exiting ..')
             break
-
+        
         img, fps_ = pose_video(frame)
+        
+        img_bgr = img[..., ::-1]
+        img_bgr = cv2.resize(img_bgr, (w, h))   # match VideoWriter dimensions
+        
+        out.write(img_bgr)
+        cv2.imshow('Output', img_bgr)
 
         cv2.putText(img, 'FPS : {:.2f}'.format(fps_), (200, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 2, cv2.LINE_AA)
         cv2.putText(img, 'YOLOv7', (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 2, cv2.LINE_AA)
 
-        cv2.imshow('Output', img[...,::-1])
-        out.write(img[...,::-1])
+#        cv2.imshow('Output', img[...,::-1])
+#        out.write(img[...,::-1])
+        
+        out.write(img_bgr)
+        cv2.imshow('Output', img_bgr)
         key = cv2.waitKey(1)
         if key == ord('q'):
         	break
