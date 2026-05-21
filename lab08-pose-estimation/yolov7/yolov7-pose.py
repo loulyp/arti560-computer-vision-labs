@@ -72,13 +72,13 @@ model.to(device)
 
 # Provide the list of paths to your chosen videos her
 videos = [
-        'skydiving',
+
         'far-away']
 
 file_name = videos[0] + '.mp4'
 vid_path = '../media/' + file_name
 # Add this after vid_path is defined
-save_name = os.path.splitext(file_name)[0]  # → 'skydiving'
+save_name = os.path.splitext(file_name)[0]  
 
 cap = cv2.VideoCapture(vid_path)
 fps = int(cap.get(cv2.CAP_PROP_FPS))
@@ -86,9 +86,9 @@ ret, frame = cap.read()
 h, w, _ = frame.shape
 
 # May need to change the w, h as letterbox function reshapes the image.
-#out = cv2.VideoWriter('./' + file_name + '_yolov7', 
-#                       cv2.VideoWriter_fourcc(*'mp4v'), 
-#                       fps, (w, h))
+out = cv2.VideoWriter('./' + file_name + '_yolov7', 
+                       cv2.VideoWriter_fourcc(*'mp4v'), 
+                       fps, (w, h))
 
 
 out = cv2.VideoWriter(f"{save_name}_yolo7.avi", cv2.VideoWriter_fourcc('M','J','P','G'), 10, (w, h))
@@ -116,8 +116,8 @@ if __name__ == '__main__':
         cv2.putText(img, 'FPS : {:.2f}'.format(fps_), (200, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 2, cv2.LINE_AA)
         cv2.putText(img, 'YOLOv7', (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 2, cv2.LINE_AA)
 
-#        cv2.imshow('Output', img[...,::-1])
-#        out.write(img[...,::-1])
+        cv2.imshow('Output', img[...,::-1])
+        out.write(img[...,::-1])
         
         out.write(img_bgr)
         cv2.imshow('Output', img_bgr)
@@ -128,3 +128,4 @@ if __name__ == '__main__':
     cap.release()
     out.release()
     cv2.destroyAllWindows()
+

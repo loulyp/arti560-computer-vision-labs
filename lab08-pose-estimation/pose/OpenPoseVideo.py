@@ -13,8 +13,8 @@ args = parser.parse_args()
 MODE = "COCO"
 
 if MODE == "COCO":
-    protoFile = "./coco/pose_deploy_linevec.prototxt"
-    weightsFile = "./coco/pose_iter_440000.caffemodel"
+    protoFile = "/Users/layan/Documents/GitHub/arti560-computer-vision-labs/lab08-pose-estimation/pose/coco/pose_deploy_linevec.prototxt"
+    weightsFile = "/Users/layan/Documents/GitHub/arti560-computer-vision-labs/lab08-pose-estimation/pose/coco/pose_iter_440000.caffemodel"
     nPoints = 18
     POSE_PAIRS = [ [1,0],[1,2],[1,5],[2,3],[3,4],[5,6],[6,7],[1,8],[8,9],[9,10],[1,11],[11,12],[12,13],[0,14],[0,15],[14,16],[15,17]]
 
@@ -25,8 +25,8 @@ elif MODE == "MPI":
     POSE_PAIRS = [[0,1], [1,2], [2,3], [3,4], [1,5], [5,6], [6,7], [1,14], [14,8], [8,9], [9,10], [14,11], [11,12], [12,13]]
 
 
-inWidth = 368
-inHeight = 368
+inWidth = 256
+inHeight = 256
 threshold = 0.1
 
 
@@ -109,7 +109,10 @@ while True:
             cv2.circle(frame, points[partB], 8, (0, 0, 255), thickness=-1, lineType=cv2.FILLED)
 
     cv2.putText(frame, "time taken = {:.2f} sec".format(time.time() - t), (50, 50), cv2.FONT_HERSHEY_COMPLEX, .8, (255, 50, 0), 2, lineType=cv2.LINE_AA)
-
+    # ADD THESE BACK:
+    cv2.imshow('Output-Keypoints', frameCopy)
+    cv2.imshow('Output-Skeleton', frame)
+    
     vid_writer.write(frame)
 
     # FIX 4: Allow quitting with 'q' if a window is open, without blocking
